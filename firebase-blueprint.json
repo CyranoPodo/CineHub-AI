@@ -1,0 +1,75 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Stores user preferences and basic info.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName"]
+    },
+    "MovieInteraction": {
+      "title": "Movie Interaction",
+      "description": "Tracks how a user interacted with a specific movie.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "movieId": { "type": "string" },
+        "title": { "type": "string" },
+        "posterPath": { "type": "string" },
+        "status": { 
+          "type": "string", 
+          "enum": ["watchlist", "ignored", "watched-liked", "watched-disliked"] 
+        },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "movieId", "status", "updatedAt"]
+    },
+    "ChatMessage": {
+      "title": "Chat Message",
+      "description": "Individual messages in the AI Concierge conversation.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "model"] },
+        "content": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "role", "content", "timestamp"]
+    },
+    "CustomList": {
+      "title": "Custom List",
+      "description": "User created movie lists.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "movieIds": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "movieIds", "createdAt"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile data."
+    },
+    "users/{userId}/interactions/{interactionId}": {
+      "schema": "MovieInteraction",
+      "description": "History of swiped/tracked movies."
+    },
+    "users/{userId}/chat/{messageId}": {
+      "schema": "ChatMessage",
+      "description": "AI conversation history."
+    },
+    "users/{userId}/lists/{listId}": {
+      "schema": "CustomList",
+      "description": "Custom movie lists created by the user."
+    }
+  }
+}
